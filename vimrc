@@ -21,11 +21,22 @@ vnoremap // y/<C-R>"<CR>
 nnoremap <space> zo
 "Use leader key + SPACE to open all fold in normal mode
 nnoremap <leader><space> zR
+"Use leader key + w to close one tab
+nnoremap <leader>w :tabc<CR>
+"Use . to delete without cutting or copying (save to the black hole sregister)
+noremap . "_d
+"Use C-h and C-l to move to the left and right
+nnoremap <c-h> 20h
+nnoremap <c-l> 20l
+"Move cursor in Insert mode
+inoremap <c-h> <left>
+inoremap <c-l> <right>
 
 "Vim SETTINGS
 set hlsearch "Set highlight searching
 set number relativenumber "Vim starts with line numbers and relative number enabling
 set numberwidth=4 "Setting number of spaces between line numbers and codes
+set autoindent
 set tabstop=4 "Setting tab width
 set shiftwidth=4 "Setting indent
 set statusline+=%F "Setting visible status line
@@ -43,6 +54,7 @@ set noshowmode "show mode using only airline, no need to show below it
 
 "PLUGGINS using Vim-plug
 call plug#begin('~/.vim/plugged') "Pluggins START
+
 
 Plug 'scrooloose/nerdtree' "Directory tree of projects
 "Use F4 for NERDTree toggling
@@ -130,7 +142,8 @@ Plug 'chiel92/vim-autoformat' "Autoformat code: indentation, etc.
 noremap <F5> :Autoformat<CR>
 
 
-Plug 'valloric/youcompleteme', { 'on': [], 'do': './install.py' } "Autocompletion
+" Plug 'valloric/youcompleteme', { 'on': [], 'do': './install.py' } "Autocompletion
+Plug 'valloric/youcompleteme' "Autocompletion
 let g:ycm_key_list_select_completion=['<C-j>', '<Down>']
 let g:ycm_key_list_previous_completion=['<C-k>', '<Up>']
 
@@ -171,7 +184,10 @@ let g:pymode_lint_on_write = 0
 let g:pymode_rope = 0
 let g:pymode_options = 0
 
-Plug 'tpope/vim-fugitive'
+Plug 'tpope/vim-fugitive' "show git branches on aireline
+
+Plug 'jiangmiao/auto-pairs' "auto brackets
+let g:AutoPairsMapCh = 0 "unmap <C-h> to delete brackets, quotes in pair
 
 Plug 'haitran14/vim-airline'
 let g:airline_themes='solarized'
@@ -188,7 +204,7 @@ let g:airline#extensions#tabline#formatter = 'unique_tail_improved' "show path w
 let g:airline#extensions#tabline#show_buffers = 0 "hide buffers to activate tabline formatter right above
 " let g:airline#extensions#tabline#left_sep = ' ' "set straight tab
 " let g:airline#extensions#tabline#left_alt_sep = '|' "put '|' character between straight tabs on tabline
-" let g:airline#extensions#tagbar#enabled=0 "hide function name on airline, to save performance
+" let g:airline#extensions#tagbar#enabled = 0 "hide function name on airline, to save performance
 let g:airline#extensions#branch#enabled = 1 "display git branch
 " let g:airline#extensions#branch#displayed_head_limit = 10 "truncate long branch names to a fixed length
 " let g:airline#extensions#branch#format = 2 "truncate all path sections but the last one
@@ -199,20 +215,14 @@ let g:airline#extensions#whitespace#mixed_indent_algo = 0 "must be all spaces or
 let g:airline#extensions#ycm#enabled = 1 "enable ycm integration
 
 
-" Plug 'jpo/vim-railscasts-theme'
-" Plug 'chriskempson/tomorrow-theme'
 Plug 'haitran14/vim-colors-solarized'
 syntax enable
 set background=dark
 let &t_Co=16
 let g:solarized_termcolors=16
-" let &t_Co=256
-" let g:solarized_termcolors=256
 nnoremap <silent> <F12> :let &background = (&background == "dark"? "light" : "dark")<CR>
 
 
 call plug#end() "Pluggins END
 
-" colorscheme railscasts
-" colorscheme torte
 colorscheme solarized
