@@ -31,6 +31,9 @@ nnoremap <c-l> 20l
 "Move cursor in Insert mode
 inoremap <c-h> <left>
 inoremap <c-l> <right>
+"Use leader key + p or P to paste from system clipboard
+nnoremap <leader>p "+p
+nnoremap <leader>P "+P
 
 "Vim SETTINGS
 set hlsearch "Set highlight searching
