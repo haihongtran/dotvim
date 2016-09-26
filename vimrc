@@ -13,8 +13,8 @@ map <Tab> <C-W>w
 nnoremap <silent> <leader>ee :e $MYVIMRC<CR>
 "Use leader key + ev to edit vimrc by splitting into a new window vertically
 nnoremap <silent> <leader>ev :vsplit $MYVIMRC<CR>
-"Use leader key + b to build ctags then set to update tag list automatically after each saving, assume that ctags has been installed into OS
-nnoremap <silent> <leader>b :!ctags -R<CR><CR> <bar> :autocmd BufWritePost * call system("ctags -R")<CR>
+"Use leader key + b to build ctags then set to update tag list automatically after each saving, assume that ctags has been installed into OS and .ctags file exists in Home directory
+nnoremap <silent> <leader>b :!ctags<CR><CR> <bar> :autocmd BufWritePost * call system("ctags")<CR>
 "Use // to search for visually selected text
 vnoremap // y/<C-R>"<CR>
 "Use SPACE to open a fold at the cursor in normal mode
@@ -62,10 +62,9 @@ call plug#begin('~/.vim/plugged') "Pluggins START
 Plug 'scrooloose/nerdtree' "Directory tree of projects
 "Use F4 for NERDTree toggling
 nnoremap <F4> :NERDTreeToggle<CR>
-"let g:NERDTreeChDirMode=1
 let g:NERDTreeWinSize = 30 "Set NERDTree sidebar width
 autocmd VimEnter * NERDTree "Open NERDTree at startup
-autocmd VimEnter * wincmd p "Move cursor to main window
+" autocmd VimEnter * wincmd p "Move cursor to main window when at opening
 
 
 Plug 'majutsushi/tagbar' "Show functions, variables, etc. of a file
@@ -187,7 +186,7 @@ let g:pymode_lint_on_write = 0
 let g:pymode_rope = 0
 let g:pymode_options = 0
 
-Plug 'tpope/vim-fugitive' "show git branches on aireline
+Plug 'tpope/vim-fugitive' "show git branches on airline
 
 Plug 'jiangmiao/auto-pairs' "auto brackets
 let g:AutoPairsMapCh = 0 "unmap <C-h> to delete brackets, quotes in pair
