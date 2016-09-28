@@ -70,6 +70,7 @@ autocmd VimEnter * NERDTree "Open NERDTree at startup
 Plug 'majutsushi/tagbar' "Show functions, variables, etc. of a file
 "Use F3 for Tagbar opening
 nnoremap <F3> :TagbarToggle<CR>
+let g:tagbar_sort = 0 "Sort tags according to their orders in file
 " let g:tagbar_width = 35
 
 
@@ -191,6 +192,48 @@ Plug 'tpope/vim-fugitive' "show git branches on airline
 Plug 'jiangmiao/auto-pairs' "auto brackets
 let g:AutoPairsMapCh = 0 "unmap <C-h> to delete brackets, quotes in pair
 
+
+Plug 'Shougo/unite.vim' "interface for searching
+let g:unite_source_history_yank_enable=1
+
+if executable('ag') "Require installation of The Silver Searcher
+    let g:unite_source_grep_command='ag'
+    let g:unite_source_grep_recursive_opt=''
+    let g:unite_source_grep_default_opts =
+                \ '-i --vimgrep --hidden --ignore ' .
+                \ '''.hg'' --ignore ''.svn'' --ignore ''.git'' --ignore ''.bzr''
+                \ --cc --make'
+endif
+
+"Use leader key + f to search for file names in current directory
+nnoremap <leader>f :<C-u>Unite -auto-resize -start-insert file_rec<CR>
+
+"Unite Settings
+function! s:unite_my_settings()"{{{
+    nmap <buffer> <C-p> <Plug>(unite_toggle_auto_preview)
+    nmap <buffer> <C-j> <Plug>(unite_loop_cursor_down)
+    nmap <buffer> <C-k> <Plug>(unite_loop_cursor_up)
+    nmap <buffer> <C-z> <Plug>(unite_toggle_mark_current_candidate)
+    nnoremap <silent><buffer><expr> <C-o> unite#do_action('switch')
+    nnoremap <silent><buffer><expr> <C-s> unite#do_action('split')
+    nnoremap <silent><buffer><expr> <C-v> unite#do_action('vsplit')
+
+    imap <buffer> <C-p> <Plug>(unite_toggle_auto_preview)
+    imap <buffer> <C-j> <Plug>(unite_select_next_line)
+    imap <buffer> <C-k> <Plug>(unite_select_previous_line)
+    imap <buffer> <C-z> <Plug>(unite_toggle_mark_current_candidate)
+    inoremap <silent><buffer><expr> <C-o> unite#do_action('switch')
+    inoremap <silent><buffer><expr> <C-s> unite#do_action('split')
+    inoremap <silent><buffer><expr> <C-v> unite#do_action('vsplit')
+endfunction"}}}
+autocmd FileType unite call s:unite_my_settings()
+
+Plug 'Shougo/vimproc.vim', {'do': 'make'} "support for unite: file_rec/async and file_reg/git
+"Use leader key +s to search for input text in multiple files
+nnoremap <silent> <leader>s :<C-u>Unite -auto-resize -auto-preview -buffer-name=search grep:.<cr>
+"Use leader key + w to search for the word under cursor in multiple files
+nnoremap <silent> <leader>w :<C-u>Unite -auto-resize -auto-preview -buffer-name=search grep:.<cr><C-r><C-w><cr>
+
 Plug 'haitran14/vim-airline'
 let g:airline_themes='solarized'
 let g:airline_powerline_fonts = 1 "enable powerline fonts
@@ -226,5 +269,8 @@ nnoremap <silent> <F12> :let &background = (&background == "dark"? "light" : "da
 
 
 call plug#end() "Pluggins END
+
+call unite#filters#matcher_default#use(['matcher_glob'])
+call unite#filters#sorter_default#use(['sorter_rank'])
 
 colorscheme solarized
