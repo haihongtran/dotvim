@@ -62,7 +62,7 @@ call plug#begin('~/.vim/plugged') "Pluggins START
 Plug 'scrooloose/nerdtree' "Directory tree of projects
 "Use F4 for NERDTree toggling
 nnoremap <F4> :NERDTreeToggle<CR>
-let g:NERDTreeWinSize = 30 "Set NERDTree sidebar width
+let g:NERDTreeWinSize = 35 "Set NERDTree sidebar width
 autocmd VimEnter * NERDTree "Open NERDTree at startup
 " autocmd VimEnter * wincmd p "Move cursor to main window when at opening
 
@@ -194,7 +194,7 @@ let g:AutoPairsMapCh = 0 "unmap <C-h> to delete brackets, quotes in pair
 
 
 Plug 'Shougo/unite.vim' "interface for searching
-let g:unite_source_history_yank_enable=1
+let g:unite_source_history_yank_enable = 1
 
 if executable('ag') "Require installation of The Silver Searcher
     let g:unite_source_grep_command='ag'
@@ -218,6 +218,7 @@ function! s:unite_my_settings()"{{{
     nnoremap <silent><buffer><expr> <C-s> unite#do_action('split')
     nnoremap <silent><buffer><expr> <C-v> unite#do_action('vsplit')
 
+    imap <buffer> <esc> <plug>(unite_exit)
     imap <buffer> <C-p> <Plug>(unite_toggle_auto_preview)
     imap <buffer> <C-j> <Plug>(unite_select_next_line)
     imap <buffer> <C-k> <Plug>(unite_select_previous_line)
@@ -263,8 +264,8 @@ let g:airline#extensions#ycm#enabled = 1 "enable ycm integration
 Plug 'haitran14/vim-colors-solarized'
 syntax enable
 set background=dark
-let &t_Co=16
-let g:solarized_termcolors=16
+let &t_Co = 16
+let g:solarized_termcolors = 16
 nnoremap <silent> <F12> :let &background = (&background == "dark"? "light" : "dark")<CR>
 
 
