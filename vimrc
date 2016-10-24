@@ -54,6 +54,8 @@ set fillchars=vert:\│ "continuous vertical split line
 set cursorline "highlight cursor line to easily spot the cursor
 set viminfo+=n~/.vim/viminfo "specify the place of viminfo
 set noshowmode "show mode using only airline, no need to show below it
+set ignorecase "case-insensitive searching
+set smartcase "search pattern contains uppercase => case-sensitive, and vice versa
 
 "PLUGGINS using Vim-plug
 call plug#begin('~/.vim/plugged') "Pluggins START
@@ -64,7 +66,7 @@ Plug 'scrooloose/nerdtree' "Directory tree of projects
 nnoremap <F4> :NERDTreeToggle<CR>
 let g:NERDTreeWinSize = 35 "Set NERDTree sidebar width
 autocmd VimEnter * NERDTree "Open NERDTree at startup
-" autocmd VimEnter * wincmd p "Move cursor to main window when at opening
+" autocmd VimEnter * wincmd p "Move cursor to main window at opening
 
 
 Plug 'majutsushi/tagbar' "Show functions, variables, etc. of a file
@@ -194,22 +196,9 @@ let g:AutoPairsMapCh = 0 "unmap <C-h> to delete brackets, quotes in pair
 
 
 Plug 'Shougo/unite.vim' "interface for searching
-let g:unite_source_history_yank_enable = 1
-
-if executable('ag') "Require installation of The Silver Searcher
-    let g:unite_source_grep_command='ag'
-    let g:unite_source_grep_recursive_opt=''
-    let g:unite_source_grep_default_opts =
-                \ '-i --vimgrep --hidden --ignore ' .
-                \ '''.hg'' --ignore ''.svn'' --ignore ''.git'' --ignore ''.bzr''
-                \ --cc --make'
-endif
-
-"Use leader key + f to search for file names in current directory
-nnoremap <leader>f :<C-u>Unite -auto-resize -start-insert file_rec<CR>
-
 "Unite Settings
 function! s:unite_my_settings()"{{{
+    nmap <buffer> <esc> <Plug>(unite_exit)
     nmap <buffer> <C-p> <Plug>(unite_toggle_auto_preview)
     nmap <buffer> <C-j> <Plug>(unite_loop_cursor_down)
     nmap <buffer> <C-k> <Plug>(unite_loop_cursor_up)
@@ -229,8 +218,24 @@ function! s:unite_my_settings()"{{{
 endfunction"}}}
 autocmd FileType unite call s:unite_my_settings()
 
+"Use leader key + r to search for file names in current directory using Unite file_rec source
+nnoremap <leader>r :<C-u>Unite -auto-resize -start-insert file_rec<CR>
+"Use leader key + l to build a file list used for Unite file_list source
+nnoremap <leader>l :!find . -iname '*.h' -o -iname '*.c' > filelist<CR><CR>
+"Use leader key + f to search for file names in current directory using Unite file_list source
+nnoremap <leader>f :<C-u>Unite -auto-resize -start-insert file_list:filelist<CR>
+
+
 Plug 'Shougo/vimproc.vim', {'do': 'make'} "support for unite: file_rec/async and file_reg/git
-"Use leader key +s to search for input text in multiple files
+if executable('ag') "Require installation of The Silver Searcher
+    let g:unite_source_grep_command='ag'
+    let g:unite_source_grep_recursive_opt=''
+    let g:unite_source_grep_default_opts =
+                \ '-i --vimgrep --hidden --ignore ' .
+                \ '''.hg'' --ignore ''.svn'' --ignore ''.git'' --ignore ''.bzr''
+                \ --cc --make'
+endif
+"Use leader key + s to search for input pattern in multiple files
 nnoremap <silent> <leader>s :<C-u>Unite -auto-resize -auto-preview -buffer-name=search grep:.<cr>
 "Use leader key + w to search for the word under cursor in multiple files
 nnoremap <silent> <leader>w :<C-u>Unite -auto-resize -auto-preview -buffer-name=search grep:.<cr><C-r><C-w><cr>
@@ -255,7 +260,7 @@ let g:airline#extensions#branch#enabled = 1 "display git branch
 " let g:airline#extensions#branch#displayed_head_limit = 10 "truncate long branch names to a fixed length
 " let g:airline#extensions#branch#format = 2 "truncate all path sections but the last one
 let g:airline#extensions#whitespace#enabled = 1 "enable detection of whitespace errors
-let g:airline#extensions#whitespace#checks = [ 'indent', 'trailing', 'mixed-indent-file' ] "specify which whitespace types to check for errors
+let g:airline#extensions#whitespace#checks = ['trailing'] "specify which whitespace types to check for errors
 let g:airline#extensions#whitespace#show_message = 1 "show messages when whitespace errors occur
 let g:airline#extensions#whitespace#mixed_indent_algo = 0 "must be all spaces or all tabs before the first non-whitespace character
 let g:airline#extensions#ycm#enabled = 1 "enable ycm integration
@@ -263,7 +268,7 @@ let g:airline#extensions#ycm#enabled = 1 "enable ycm integration
 
 Plug 'haitran14/vim-colors-solarized'
 syntax enable
-set background=dark
+set background=light
 let &t_Co = 16
 let g:solarized_termcolors = 16
 nnoremap <silent> <F12> :let &background = (&background == "dark"? "light" : "dark")<CR>
